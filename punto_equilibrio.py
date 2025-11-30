@@ -1,27 +1,31 @@
 def calcular_punto_equilibrio():
-    print("🍕 Calculadora de Punto de Equilibrio para Pizzería 🍕")
-    
+    print("Calculadora de Punto de Equilibrio\n")
+
     # Entrada de datos
-    costos_fijos = float(input("👉 Ingresá tus costos fijos mensuales ($): "))
-    costo_pizza = float(input("👉 Ingresá el costo de hacer una pizza ($): "))
-    precio_venta = float(input("👉 Ingresá el precio de venta de una pizza ($): "))
+    try:
+        costos_fijos = float(input("Ingresar costos fijos mensuales ($): "))
+        costo_variable_unitario = float(input("Ingresar costo variable unitario por producto ($): "))
+        precio_venta_unitario = float(input("Ingresar precio de venta unitario ($): "))
+    except ValueError:
+        print("Error: Ingresar valores numéricos válidos.")
+        return
 
     # Validación
-    if precio_venta <= costo_pizza:
-        print("⚠️ No hay ganancia por pizza. Revisá tus precios.")
+    if precio_venta_unitario <= costo_variable_unitario:
+        print("No hay margen de ganancia. Revisar precios o costos.")
         return
 
     # Cálculos
-    ganancia_por_pizza = precio_venta - costo_pizza
-    punto_equilibrio = costos_fijos / ganancia_por_pizza
-    porcentaje_ganancia = (ganancia_por_pizza / costo_pizza) * 100
+    margen_contribucion = precio_venta_unitario - costo_variable_unitario
+    punto_equilibrio_unidades = costos_fijos / margen_contribucion
+    porcentaje_ganancia = (margen_contribucion / costo_variable_unitario) * 100
 
     # Resultados
-    print("\n📈 Resultados:")
-    print(f"✅ Ganancia por pizza: ${ganancia_por_pizza:.2f}")
-    print(f"✅ Porcentaje de ganancia por pizza: {porcentaje_ganancia:.2f}%")
-    print(f"✅ Punto de equilibrio: {punto_equilibrio:.0f} pizzas (para cubrir costos)")
-    print(f"✅ Cada pizza vendida después del punto de equilibrio te deja: ${ganancia_por_pizza:.2f}")
+    print("\nResultados:")
+    print(f"Margen de contribución por unidad: ${margen_contribucion:.2f}")
+    print(f"Porcentaje de ganancia sobre costo variable: {porcentaje_ganancia:.2f}%")
+    print(f"Punto de equilibrio: {punto_equilibrio_unidades:.0f} unidades (para cubrir los costos fijos)")
+    print(f"Ganancia neta por unidad vendida después del punto de equilibrio: ${margen_contribucion:.2f}")
 
-# Ejecutar
-calcular_punto_equilibrio()
+if __name__ == "__main__":
+    calcular_punto_equilibrio()
