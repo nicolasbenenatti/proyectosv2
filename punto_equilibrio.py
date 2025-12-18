@@ -29,7 +29,7 @@ def calcular():
 
 # Crear ventana
 ventana = tk.Tk()
-ventana.title("Calculadora de Punto de Equilibrio")
+ventana.title("Calculadora de Punto de ")
 
 # Layout
 tk.Label(ventana, text="Costos fijos mensuales ($):").grid(row=0, column=0, sticky="e")
