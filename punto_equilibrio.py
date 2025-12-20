@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox, ttk
 
 def calcular():
     try:
@@ -8,45 +8,47 @@ def calcular():
         precio_venta = float(entry_precio_venta.get())
 
         if precio_venta <= costo_variable:
-            messagebox.showwarning("Advertencia", "No hay margen de ganancia. Revisá los precios.")
+            messagebox.showwarning("Advertencia", "El precio de venta debe ser mayor al costo variable.")
             return
 
         margen = precio_venta - costo_variable
-        punto_equilibrio = costos_fijos / margen
-        porcentaje = (margen / costo_variable) * 100
-
-        resultado = (
-            f"Margen de contribución por unidad: ${margen:.2f}\n"
-            f"Porcentaje de ganancia: {porcentaje:.2f}%\n"
-            f"Punto de equilibrio: {punto_equilibrio:.0f} unidades\n"
-            f"Ganancia neta por unidad: ${margen:.2f}"
+        punto_e = costos_fijos / margen
+        
+        # Animación simple de barra de progreso
+        progress['value'] = 0
+        ventana.update_idletasks()
+        progress['value'] = 100
+        
+        res_text = (
+            f"💰 Margen: ${margen:.2f}\n"
+            f"📈 Punto de Equilibrio: {punto_e:.0f} unidades\n"
+            f"💵 Facturación necesaria: ${punto_e * precio_venta:.2f}"
         )
-
-        resultado_label.config(text=resultado)
+        label_res.config(text=res_text, fg="#2e7d32")
 
     except ValueError:
-        messagebox.showerror("Error", "Ingresar valores numéricos válidos.")
+        messagebox.showerror("Error", "Por favor, ingresá solo números.")
 
-# Crear ventana
 ventana = tk.Tk()
-ventana.title("Calculadora de Punto de Equilibrio")
+ventana.title("Calculadora Pro v4")
+ventana.geometry("300x400")
+ventana.configure(bg="#eceff1")
 
-# Layout
-tk.Label(ventana, text="Costos fijos mensuales ($):").grid(row=0, column=0, sticky="e")
-entry_costos_fijos = tk.Entry(ventana)
-entry_costos_fijos.grid(row=0, column=1)
+tk.Label(ventana, text="PUNTO DE EQUILIBRIO", font=("Arial", 12, "bold"), bg="#eceff1").pack(pady=10)
 
-tk.Label(ventana, text="Costo variable unitario ($):").grid(row=1, column=0, sticky="e")
-entry_costo_variable = tk.Entry(ventana)
-entry_costo_variable.grid(row=1, column=1)
+# Campos
+campos = [("Costos Fijos", "entry_costos_fijos"), ("Costo Variable", "entry_costo_variable"), ("Precio Venta", "entry_precio_venta")]
+for txt, var in campos:
+    tk.Label(ventana, text=txt, bg="#eceff1").pack()
+    globals()[var] = tk.Entry(ventana, justify="center")
+    globals()[var].pack(pady=5)
 
-tk.Label(ventana, text="Precio de venta unitario ($):").grid(row=2, column=0, sticky="e")
-entry_precio_venta = tk.Entry(ventana)
-entry_precio_venta.grid(row=2, column=1)
+tk.Button(ventana, text="CALCULAR", command=calcular, bg="#1565c0", fg="white", width=15).pack(pady=20)
 
-tk.Button(ventana, text="Calcular", command=calcular).grid(row=3, column=0, columnspan=2, pady=10)
+progress = ttk.Progressbar(ventana, orient="horizontal", length=200, mode="determinate")
+progress.pack(pady=5)
 
-resultado_label = tk.Label(ventana, text="", justify="left", font=("Arial", 10), fg="navy")
-resultado_label.grid(row=4, column=0, columnspan=2, padx=10, pady=10)
+label_res = tk.Label(ventana, text="", bg="#eceff1", font=("Arial", 10, "bold"))
+label_res.pack(pady=10)
 
 ventana.mainloop()
